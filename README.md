@@ -1,20 +1,48 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Yaswanth Ala — Portfolio
 
-# Run and deploy your AI Studio app
+Personal portfolio site for Yaswanth Ala, ML/AI Engineer. Built as a single-page
+React app with a design system of self-hosted variable fonts, layered dark
+surfaces, and scroll-triggered motion.
 
-This contains everything you need to run your app locally.
+## Tech stack
 
-View your app in AI Studio: https://ai.studio/apps/72223ada-701f-41c3-a309-08183109acb9
+- **React 19** + **TypeScript**
+- **Vite** — dev server and build
+- **Tailwind CSS v4** — CSS-first theming via `@theme`
+- **Framer Motion** (`motion`) — scroll reveals, stagger, and interaction animations
+- **Fontsource** — self-hosted variable fonts (Bricolage Grotesque for display, Geist for body)
 
-## Run Locally
+## Local development
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run dev
+```
 
+The dev server runs at `http://localhost:3000`.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Build
+
+```bash
+npm run build
+```
+
+Outputs a production build to `dist/`. Preview it locally with:
+
+```bash
+npm run preview
+```
+
+## Type checking
+
+```bash
+npm run lint
+```
+
+Runs `tsc --noEmit` to check types without emitting output.
+
+## Deployment
+
+The app is a static Vite build — deploy the contents of `dist/` to any static
+host (Vercel, Netlify, GitHub Pages, Cloudflare Pages, etc.). No environment
+variables or server-side runtime are required.
