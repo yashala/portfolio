@@ -573,7 +573,7 @@ export default function App() {
                     transformPerspective: 900,
                   }}
                 >
-                  <PhotoFrame src="/y-removebg-preview.png" />
+                  <PhotoFrame src={`${import.meta.env.BASE_URL}y-removebg-preview.png`} />
                 </motion.div>
               </motion.div>
             </div>

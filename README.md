@@ -19,7 +19,8 @@ npm install
 npm run dev
 ```
 
-The dev server runs at `http://localhost:3000`.
+The dev server runs at `http://localhost:3000/portfolio/` (the `/portfolio/`
+base path matches the GitHub Pages deployment — see below).
 
 ## Build
 
@@ -43,6 +44,11 @@ Runs `tsc --noEmit` to check types without emitting output.
 
 ## Deployment
 
-The app is a static Vite build — deploy the contents of `dist/` to any static
-host (Vercel, Netlify, GitHub Pages, Cloudflare Pages, etc.). No environment
-variables or server-side runtime are required.
+Live at **https://yashala.github.io/portfolio/**.
+
+Deployment is automatic: `.github/workflows/deploy.yml` builds and publishes
+to GitHub Pages on every push to `main`. The app is otherwise a plain static
+Vite build and can be deployed to any static host (Vercel, Netlify, Cloudflare
+Pages, etc.) — just drop the `base` path in `vite.config.ts` if hosting at a
+domain root instead of a `/portfolio/` subpath. No environment variables or
+server-side runtime are required.
