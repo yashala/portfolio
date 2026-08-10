@@ -209,7 +209,7 @@ const statItemVariants = {
 
 function PhotoFrame({
   src,
-  bgColor = "#0f0f12",
+  bgColor = "#08080a",
 }: {
   src: string;
   bgColor?: string;
@@ -267,44 +267,36 @@ function PhotoFrame({
     <div
       role="img"
       aria-label="Portrait of Yaswanth Ala, ML/AI engineer"
-      className="relative w-[400px] h-[480px] mx-auto"
+      className="relative w-[460px] h-[560px] mx-auto"
     >
       {/* The one deliberate glow moment for this element — everything else stays flat */}
       <div
-        className="absolute -inset-8 -z-10 pointer-events-none"
+        className="absolute -inset-10 -z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 58% 52% at 50% 34%, rgba(99,102,241,0.18) 0%, transparent 70%)",
-          filter: "blur(36px)",
+            "radial-gradient(ellipse 56% 50% at 50% 32%, rgba(99,102,241,0.16) 0%, transparent 70%)",
+          filter: "blur(44px)",
         }}
       />
 
-      {/* Frame plate — thin low-opacity border, canvas blends into its exact surface tone */}
-      <div className="relative w-full h-full rounded-[2rem] border border-border-strong/60 bg-surface-1 overflow-hidden">
-        <canvas
-          ref={canvasRef}
-          className="w-full h-full"
-          style={{
-            opacity: ready ? 1 : 0,
-            transition: "opacity 0.7s ease",
-          }}
-        />
+      {/* No frame, no border — the canvas's own vignette blends straight into the page bg */}
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full"
+        style={{
+          opacity: ready ? 1 : 0,
+          transition: "opacity 0.7s ease",
+        }}
+      />
 
-        {/* Soft key-light sheen, upper-left — lighting cue without a literal light source */}
-        <div
-          className="absolute inset-0 pointer-events-none mix-blend-soft-light"
-          style={{
-            background:
-              "radial-gradient(ellipse 45% 40% at 26% 16%, rgba(255,255,255,0.30), transparent 62%)",
-          }}
-        />
-
-        {/* Glass-edge highlight — 1px inner border catching the ambient glow */}
-        <div
-          className="absolute inset-0 rounded-[2rem] pointer-events-none"
-          style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05)" }}
-        />
-      </div>
+      {/* Soft key-light sheen, upper-left — lighting cue without a literal light source */}
+      <div
+        className="absolute inset-0 pointer-events-none mix-blend-soft-light"
+        style={{
+          background:
+            "radial-gradient(ellipse 40% 36% at 28% 16%, rgba(255,255,255,0.22), transparent 62%)",
+        }}
+      />
     </div>
   );
 }
