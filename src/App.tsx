@@ -221,19 +221,14 @@ const statItemVariants = {
 //
 // How this component works for visitors:
 //   • Loads the transparent PNG (background already removed by the tool above)
-//   • Fills a <canvas> with your exact portfolio bg colour (#09090b)
-//   • Draws the transparent PNG on top — body edges are pixel-perfect,
-//     transparent pixels become the portfolio colour with zero visible seam
-//   • Applies a radial gradient over the canvas so shoulders fade out softly
+//   • Draws it onto a canvas that stays genuinely transparent everywhere else —
+//     no bg-colour fill, so whatever sits behind it (page bg, dot grid, glow)
+//     shows through with zero seam, and it never needs to match a hex value
+//   • Erases (not paints) a radial falloff around the shoulders via
+//     destination-out compositing, so edges feather into true transparency
 //   • Total draw time: ~2 ms — renders before the user even notices it loaded
 
-function PhotoFrame({
-  src,
-  bgColor = "#08080a",
-}: {
-  src: string;
-  bgColor?: string;
-}) {
+function PhotoFrame({ src }: { src: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
 
@@ -248,32 +243,27 @@ function PhotoFrame({
       canvas.width  = img.naturalWidth;
       canvas.height = img.naturalHeight;
 
-      // ① Exact portfolio background — transparent PNG pixels show this colour
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // ② Draw the person — edges are already pixel-perfect from remove.bg
+      // ① Draw the person — background is already transparent from remove.bg
       ctx.drawImage(img, 0, 0);
 
-      // ③ Radial vignette centred on the face
-      //    Inner radius: face stays completely sharp
-      //    Outer radius: shoulders dissolve into the page colour naturally
+      // ② Feather the shoulders into transparency via destination-out: the
+      //    gradient's alpha controls how much gets erased, not painted —
+      //    face stays fully opaque, edges fade to true alpha 0.
       const cx = canvas.width  / 2;
       const cy = canvas.height * 0.36;
-      const rr = parseInt(bgColor.slice(1, 3), 16);
-      const gg = parseInt(bgColor.slice(3, 5), 16);
-      const bb = parseInt(bgColor.slice(5, 7), 16);
 
       const grad = ctx.createRadialGradient(
         cx, cy, canvas.width * 0.22,   // inner — keep face sharp
-        cx, cy, canvas.width * 0.70    // outer — full fade
+        cx, cy, canvas.width * 0.70    // outer — fully erased
       );
-      grad.addColorStop(0,    `rgba(${rr},${gg},${bb},0)`);
-      grad.addColorStop(0.50, `rgba(${rr},${gg},${bb},0.08)`);
-      grad.addColorStop(1,    `rgba(${rr},${gg},${bb},0.96)`);
+      grad.addColorStop(0,    "rgba(0,0,0,0)");
+      grad.addColorStop(0.50, "rgba(0,0,0,0.08)");
+      grad.addColorStop(1,    "rgba(0,0,0,0.96)");
 
+      ctx.globalCompositeOperation = "destination-out";
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = "source-over";
 
       setReady(true);
     };
@@ -281,13 +271,13 @@ function PhotoFrame({
     // On error: canvas stays invisible, no broken-image icon shown
     img.onerror = () => setReady(true);
     img.src = src;
-  }, [src, bgColor]);
+  }, [src]);
 
   return (
     <div
       role="img"
       aria-label="Portrait of Yaswanth Ala, ML/AI engineer"
-      className="relative w-[460px] h-[560px] mx-auto"
+      className="relative w-[460px] aspect-[432/577] mx-auto"
     >
       {/* The one deliberate glow moment for this element — everything else stays flat */}
       <div
