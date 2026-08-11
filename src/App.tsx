@@ -15,6 +15,9 @@ import {
   HeartPulse,
   Users,
   MapPin,
+  Download,
+  Menu,
+  X,
 } from "lucide-react";
 import { useState, useEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
 
@@ -39,7 +42,11 @@ const projects = [
     icon: <Bot className="w-1/2 h-1/2" />,
     color: "from-blue-600/20 to-indigo-600/20",
     image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000",
-    github: "https://github.com/yashala/intelli-doc",
+    imageAlt: "Abstract visualization of a retrieval-augmented generation pipeline",
+    imageWidth: 1000,
+    imageHeight: 563,
+    // TODO: repo is private — restore link when public
+    github: null,
   },
   {
     id: 2,
@@ -51,6 +58,9 @@ const projects = [
     icon: <Stethoscope className="w-1/2 h-1/2" />,
     color: "from-red-600/20 to-purple-600/20",
     image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=1000",
+    imageAlt: "MRI brain scan imagery used for tumor detection",
+    imageWidth: 1000,
+    imageHeight: 1000,
     github: "https://github.com/yashala/Brain-Tumor-detection",
   },
   {
@@ -63,7 +73,11 @@ const projects = [
     icon: <HeartPulse className="w-1/2 h-1/2" />,
     color: "from-green-600/20 to-teal-600/20",
     image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000",
-    github: "https://github.com/yashala/Healthy-Fight",
+    imageAlt: "Group fitness activity representing social wellness tracking",
+    imageWidth: 1000,
+    imageHeight: 630,
+    // TODO: repo is private — restore link when public
+    github: null,
   },
   {
     id: 4,
@@ -75,6 +89,9 @@ const projects = [
     icon: <Car className="w-1/2 h-1/2" />,
     color: "from-emerald-600/20 to-teal-600/20",
     image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1000",
+    imageAlt: "Nighttime road view evoking driver drowsiness monitoring",
+    imageWidth: 1000,
+    imageHeight: 667,
     github: "https://github.com/yashala/Drowsiness-detection-system-",
   },
   {
@@ -87,6 +104,9 @@ const projects = [
     icon: <GlassWater className="w-1/2 h-1/2" />,
     color: "from-yellow-600/20 to-orange-600/20",
     image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1000",
+    imageAlt: "Glasses of wine representing physicochemical quality analysis",
+    imageWidth: 1000,
+    imageHeight: 667,
     github: "https://github.com/yashala/Wine-Quality-prediction",
   },
 ];
@@ -195,8 +215,8 @@ const statItemVariants = {
 // ONE-TIME SETUP (takes ~60 seconds):
 //   1. Go to https://remove.bg  — free, no account needed for the first image
 //      Other free options: Adobe Express, Canva, Pixlr
-//   2. Upload yaswanth.png  →  download the result as  yaswanth-nobg.png
-//   3. Save it to  /public/yaswanth-nobg.png  in your project
+//   2. Upload your source photo  →  download the result as a transparent PNG
+//   3. Save it to  /public/y-removebg-preview.png  in your project
 //   4. Deploy — done forever. Every visitor gets it instantly from your CDN.
 //
 // How this component works for visitors:
@@ -306,7 +326,10 @@ function PhotoFrame({
 export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [phraseIndex, setPhraseIndex] = useState(0);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const projectsRef = useRef<HTMLDivElement>(null);
+  const mobileNavPanelRef = useRef<HTMLDivElement>(null);
+  const mobileNavToggleRef = useRef<HTMLButtonElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: projectsRef,
@@ -342,6 +365,54 @@ export default function App() {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
+
+  // Mobile nav: lock body scroll while open, restore it on close/unmount.
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileNavOpen]);
+
+  // Mobile nav: Escape closes it; focus the panel on open and return focus
+  // to the toggle button on close.
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+
+    const panel = mobileNavPanelRef.current;
+    const focusableSelector = 'a[href], button:not([disabled])';
+    const panelFocusables = panel ? Array.from(panel.querySelectorAll<HTMLElement>(focusableSelector)) : [];
+    // The toggle button lives outside the panel (in the fixed nav) but stays
+    // visible and clickable while the panel is open, so it's part of the trap too.
+    const toggle = mobileNavToggleRef.current;
+    const focusables = toggle ? [toggle, ...panelFocusables] : panelFocusables;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileNavOpen(false);
+        return;
+      }
+      if (e.key !== "Tab" || focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      mobileNavToggleRef.current?.focus();
+    };
+  }, [mobileNavOpen]);
 
   // Magnetic tilt on the hero portrait — springs back to rest on mouse leave,
   // fully inert when the visitor has requested reduced motion.
@@ -401,21 +472,68 @@ export default function App() {
             ))}
           </div>
 
-          <motion.a
-            href="https://linkedin.com/in/yaswanth-a-a21aa9148/"
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            whileHover={{ scale: 1.04, boxShadow: "0 0 22px rgba(99,102,241,0.35)" }}
-            whileTap={{ scale: 0.96 }}
-            className="bg-text-main text-bg px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-accent hover:text-white transition-all duration-500"
-          >
-            Let's Talk
-          </motion.a>
+          <div className="flex items-center gap-3">
+            <motion.a
+              href="https://linkedin.com/in/yaswanth-a-a21aa9148/"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              whileHover={{ scale: 1.04, boxShadow: "0 0 22px rgba(99,102,241,0.35)" }}
+              whileTap={{ scale: 0.96 }}
+              className="bg-text-main text-bg px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-accent hover:text-white transition-all duration-500"
+            >
+              Let's Talk
+            </motion.a>
+
+            <button
+              ref={mobileNavToggleRef}
+              type="button"
+              onClick={() => setMobileNavOpen((open) => !open)}
+              aria-expanded={mobileNavOpen}
+              aria-controls="mobile-nav-panel"
+              aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
+              className="md:hidden w-10 h-10 rounded-xl border border-border-dim flex items-center justify-center text-text-main hover:text-accent hover:border-accent/40 transition-all duration-300"
+            >
+              {mobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </nav>
+
+      {/* ── MOBILE NAV PANEL ────────────────────────────────────────── */}
+      <AnimatePresence>
+        {mobileNavOpen && (
+          <motion.div
+            id="mobile-nav-panel"
+            ref={mobileNavPanelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 md:hidden bg-bg/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-2"
+          >
+            {navLinks.map((item, i) => (
+              <motion.a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={() => setMobileNavOpen(false)}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ delay: 0.05 + i * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="text-4xl font-display font-black uppercase tracking-tighter text-text-main hover:text-accent transition-colors duration-300 py-3"
+              >
+                {item}
+              </motion.a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main>
         {/* ── HERO ─────────────────────────────────────────────────── */}
@@ -516,10 +634,22 @@ export default function App() {
                   <p className="text-text-dim/45 text-sm italic leading-relaxed border-l-2 border-accent/30 pl-4">
                     "Engineering is the art of reducing entropy." — how I think about everything.
                   </p>
-                  <div className="flex gap-3 pt-1">
+                  <div className="flex items-center gap-3 pt-1">
+                    <motion.a
+                      href={`${import.meta.env.BASE_URL}Yaswanth-Ala-Resume.pdf`}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.04, boxShadow: "0 0 22px rgba(99,102,241,0.35)" }}
+                      whileTap={{ scale: 0.96 }}
+                      className="flex items-center gap-2 bg-text-main text-bg px-6 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-accent hover:text-white transition-all duration-500"
+                    >
+                      <Download className="w-4 h-4" />
+                      Resume
+                    </motion.a>
                     {[
                       { href: "mailto:alayaswanth007@gmail.com", icon: <Mail className="w-4 h-4" />, label: "Email" },
-                      { href: "https://github.com/alayaswanth007", icon: <Github className="w-4 h-4" />, label: "GitHub" },
+                      { href: "https://github.com/yashala", icon: <Github className="w-4 h-4" />, label: "GitHub" },
                       { href: "https://linkedin.com/in/yaswanth-a-a21aa9148/", icon: <Linkedin className="w-4 h-4" />, label: "LinkedIn" },
                     ].map(({ href, icon, label }) => (
                       <motion.a
@@ -544,7 +674,7 @@ export default function App() {
                   it onto a canvas filled with the frame plate's surface colour.
                   Zero library. Zero model download. ~2 ms render for every visitor.
 
-                  src → /public/yaswanth-nobg.png (your bg-removed photo)
+                  src → /public/y-removebg-preview.png (your bg-removed photo)
                   The outer motion.div tilts toward the cursor for a subtle
                   magnetic feel; it's inert under prefers-reduced-motion.
               ──────────────────────────────────────────────────────────────── */}
@@ -776,49 +906,74 @@ export default function App() {
               </div>
 
               {/* Project cards */}
-              {projects.map((project) => (
-                <motion.a
-                  key={project.id}
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative h-[65vh] md:h-[75vh] w-[85vw] md:w-[65vw] flex-shrink-0 bg-card-bg border border-border-dim rounded-[3rem] overflow-hidden cursor-pointer transition-all duration-700 hover:border-accent/30 shadow-2xl shadow-black/50"
-                  whileHover={{ scale: 1.008 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-10 group-hover:opacity-30 transition-opacity duration-700`} />
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-25 group-hover:scale-[1.04] transition-transform duration-[2.5s] ease-out"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-8 right-8 md:top-10 md:right-10 text-[10px] font-black uppercase tracking-widest text-text-dim/25 font-mono">
-                    {project.num} / 05
-                  </div>
-                  <div className="absolute inset-0 p-8 md:p-14 flex flex-col justify-end bg-gradient-to-t from-bg/96 via-bg/15 to-transparent">
-                    <div className="relative z-20">
-                      <div className="w-14 h-14 md:w-20 md:h-20 bg-accent/10 backdrop-blur-2xl rounded-2xl flex items-center justify-center mb-6 md:mb-8 border border-accent/20 group-hover:scale-110 group-hover:border-accent/50 transition-all duration-500 text-accent">
-                        {project.icon}
-                      </div>
-                      <h3 className="text-3xl md:text-6xl font-black mb-4 uppercase tracking-tighter leading-none flex items-start gap-4">
-                        {project.title}
-                        <ArrowUpRight className="w-8 h-8 md:w-12 md:h-12 text-accent opacity-0 group-hover:opacity-100 transition-all duration-500 -translate-y-4 translate-x-4 group-hover:translate-y-0 group-hover:translate-x-0 flex-shrink-0" />
-                      </h3>
-                      <p className="text-sm md:text-xl text-text-dim mb-8 leading-relaxed font-light max-w-2xl">
-                        {project.description}
-                      </p>
-                      <div className="flex flex-wrap gap-3">
-                        {project.tags.map((tag) => (
-                          <span key={tag} className="text-[10px] uppercase tracking-[0.28em] font-black px-5 py-2.5 rounded-full border border-border-dim bg-bg/60 backdrop-blur-xl text-text-dim group-hover:border-accent/30 group-hover:text-accent transition-all duration-500">
-                            {tag}
-                          </span>
-                        ))}
+              {projects.map((project) => {
+                const isLinked = Boolean(project.github);
+                const cardClassName = `relative h-[65vh] md:h-[75vh] w-[85vw] md:w-[65vw] flex-shrink-0 bg-card-bg border border-border-dim rounded-[3rem] overflow-hidden transition-all duration-700 shadow-2xl shadow-black/50 ${
+                  isLinked ? "group cursor-pointer hover:border-accent/30" : ""
+                }`;
+
+                const cardContent = (
+                  <>
+                    <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-10 group-hover:opacity-30 transition-opacity duration-700`} />
+                    <img
+                      src={project.image}
+                      alt={project.imageAlt}
+                      width={project.imageWidth}
+                      height={project.imageHeight}
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-25 group-hover:scale-[1.04] transition-transform duration-[2.5s] ease-out"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute top-8 right-8 md:top-10 md:right-10 text-[10px] font-black uppercase tracking-widest text-text-dim/25 font-mono">
+                      {project.num} / 05
+                    </div>
+                    <div className="absolute inset-0 p-8 md:p-14 flex flex-col justify-end bg-gradient-to-t from-bg/96 via-bg/15 to-transparent">
+                      <div className="relative z-20">
+                        <div className="w-14 h-14 md:w-20 md:h-20 bg-accent/10 backdrop-blur-2xl rounded-2xl flex items-center justify-center mb-6 md:mb-8 border border-accent/20 group-hover:scale-110 group-hover:border-accent/50 transition-all duration-500 text-accent">
+                          {project.icon}
+                        </div>
+                        <h3 className="text-3xl md:text-6xl font-black mb-4 uppercase tracking-tighter leading-none flex items-start gap-4">
+                          {project.title}
+                          <ArrowUpRight className="w-8 h-8 md:w-12 md:h-12 text-accent opacity-0 group-hover:opacity-100 transition-all duration-500 -translate-y-4 translate-x-4 group-hover:translate-y-0 group-hover:translate-x-0 flex-shrink-0" />
+                        </h3>
+                        <p className="text-sm md:text-xl text-text-dim mb-8 leading-relaxed font-light max-w-2xl">
+                          {project.description}
+                        </p>
+                        <div className="flex flex-wrap gap-3">
+                          {project.tags.map((tag) => (
+                            <span key={tag} className="text-[10px] uppercase tracking-[0.28em] font-black px-5 py-2.5 rounded-full border border-border-dim bg-bg/60 backdrop-blur-xl text-text-dim group-hover:border-accent/30 group-hover:text-accent transition-all duration-500">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.a>
-              ))}
+                  </>
+                );
+
+                return isLinked ? (
+                  <motion.a
+                    key={project.id}
+                    href={project.github!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cardClassName}
+                    whileHover={{ scale: 1.008 }}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {cardContent}
+                  </motion.a>
+                ) : (
+                  <motion.div
+                    key={project.id}
+                    className={cardClassName}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {cardContent}
+                  </motion.div>
+                );
+              })}
 
               {/* End slide */}
               <div className="flex flex-col justify-center w-screen flex-shrink-0 items-center text-center px-8 md:px-24">
@@ -840,7 +995,7 @@ export default function App() {
                     I don't stop shipping when I run out of ideas. I run out of sleep.
                   </p>
                   <motion.a
-                    href="https://github.com/alayaswanth007"
+                    href="https://github.com/yashala"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ y: -4, borderColor: "rgba(99,102,241,0.5)" }}
@@ -1062,9 +1217,21 @@ export default function App() {
                   >
                     Start a conversation →
                   </motion.a>
+                  <motion.a
+                    href={`${import.meta.env.BASE_URL}Yaswanth-Ala-Resume.pdf`}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.04, y: -4 }}
+                    whileTap={{ scale: 0.96 }}
+                    className="flex items-center gap-2 bg-white text-accent px-10 py-5 rounded-2xl font-black uppercase tracking-widest hover:shadow-2xl transition-all duration-400 text-sm"
+                  >
+                    <Download className="w-4 h-4" />
+                    Resume
+                  </motion.a>
                   <div className="flex gap-4">
                     {[
-                      { href: "https://github.com/alayaswanth007", icon: <Github className="w-6 h-6" />, label: "GitHub" },
+                      { href: "https://github.com/yashala", icon: <Github className="w-6 h-6" />, label: "GitHub" },
                       { href: "https://linkedin.com/in/yaswanth-a-a21aa9148/", icon: <Linkedin className="w-6 h-6" />, label: "LinkedIn" },
                     ].map(({ href, icon, label }) => (
                       <motion.a
@@ -1099,7 +1266,7 @@ export default function App() {
           </div>
           <div className="flex gap-10 text-[10px] font-black uppercase tracking-[0.4em] text-text-dim/45">
             <a href="https://linkedin.com/in/yaswanth-a-a21aa9148/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors duration-400">LinkedIn</a>
-            <a href="https://github.com/alayaswanth007" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors duration-400">GitHub</a>
+            <a href="https://github.com/yashala" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors duration-400">GitHub</a>
             <a href="mailto:alayaswanth007@gmail.com" className="hover:text-accent transition-colors duration-400">Email</a>
           </div>
           <div className="flex items-center gap-2 text-[10px] text-text-dim/20 uppercase tracking-[0.5em] font-black">
