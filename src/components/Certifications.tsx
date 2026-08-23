@@ -5,17 +5,14 @@ export function Certifications() {
   return (
     <section id="certifications" className="py-24 px-6 border-t border-border-dim">
       <div className="max-w-3xl mx-auto">
-        <div className="flex items-baseline gap-3">
-          <span className="font-mono text-xs text-text-faint">05</span>
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="font-mono text-xs uppercase tracking-label text-accent"
-          >
-            Certifications
-          </motion.h2>
-        </div>
+        <motion.h2
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="font-mono text-xs uppercase tracking-label text-accent"
+        >
+          Certifications
+        </motion.h2>
 
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {certifications.map((cert, i) => (

@@ -53,7 +53,8 @@ export function Hero() {
               className="mt-6 text-lg md:text-xl text-text-dim max-w-xl leading-relaxed"
             >
               AI Engineer — 4 years across software, data, and ML engineering, ~2 building
-              production LLM and agentic systems.
+              production LLM and agentic systems. Full-stack to data to AI — whatever's next,
+              I'm already learning it.
             </motion.p>
 
             <motion.div

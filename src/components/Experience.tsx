@@ -5,17 +5,14 @@ export function Experience() {
   return (
     <section id="experience" className="py-24 px-6 border-t border-border-dim">
       <div className="max-w-3xl mx-auto">
-        <div className="flex items-baseline gap-3">
-          <span className="font-mono text-xs text-text-faint">02</span>
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="font-mono text-xs uppercase tracking-label text-accent"
-          >
-            Experience
-          </motion.h2>
-        </div>
+        <motion.h2
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="font-mono text-xs uppercase tracking-label text-accent"
+        >
+          Experience
+        </motion.h2>
 
         <div className="mt-8 flex flex-col gap-14">
           {experience.map((role, i) => (

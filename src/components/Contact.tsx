@@ -5,10 +5,7 @@ export function Contact() {
   return (
     <section id="contact" className="py-28 px-6 border-t border-border-dim">
       <div className="max-w-3xl mx-auto text-center">
-        <div className="flex items-baseline justify-center gap-3">
-          <span className="font-mono text-xs text-text-faint">06</span>
-          <span className="font-mono text-xs uppercase tracking-label text-accent">Contact</span>
-        </div>
+        <span className="font-mono text-xs uppercase tracking-label text-accent">Contact</span>
         <motion.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}

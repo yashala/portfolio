@@ -69,17 +69,14 @@ export function Projects() {
   return (
     <section id="projects" className="py-24 px-6 border-t border-border-dim">
       <div className="max-w-3xl mx-auto">
-        <div className="flex items-baseline gap-3">
-          <span className="font-mono text-xs text-text-faint">04</span>
-          <motion.h2
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="font-mono text-xs uppercase tracking-label text-accent"
-          >
-            Projects
-          </motion.h2>
-        </div>
+        <motion.h2
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="font-mono text-xs uppercase tracking-label text-accent"
+        >
+          Projects
+        </motion.h2>
 
         {/* flex+gap, not space-y — this build's compiled CSS has zero space-y-*
             rules (verified via stylesheet inspection), which silently zeroed
