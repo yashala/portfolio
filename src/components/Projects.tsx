@@ -48,9 +48,16 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
   );
 
   return isLinked ? (
-    <a href={project.github!} target="_blank" rel="noopener noreferrer" className={baseClass}>
+    <motion.a
+      href={project.github!}
+      target="_blank"
+      rel="noopener noreferrer"
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.15 }}
+      className={baseClass}
+    >
       {content}
-    </a>
+    </motion.a>
   ) : (
     <div className={baseClass}>{content}</div>
   );
@@ -62,14 +69,17 @@ export function Projects() {
   return (
     <section id="projects" className="py-24 px-6 border-t border-border-dim">
       <div className="max-w-3xl mx-auto">
-        <motion.h2
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="font-mono text-xs uppercase tracking-label text-accent"
-        >
-          Projects
-        </motion.h2>
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-xs text-text-faint">04</span>
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="font-mono text-xs uppercase tracking-label text-accent"
+          >
+            Projects
+          </motion.h2>
+        </div>
 
         {/* flex+gap, not space-y — this build's compiled CSS has zero space-y-*
             rules (verified via stylesheet inspection), which silently zeroed
@@ -79,7 +89,7 @@ export function Projects() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.2 }}
           className="mt-8 flex flex-col gap-5"
         >
           <ProjectCard project={featured} featured />

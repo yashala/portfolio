@@ -5,14 +5,17 @@ export function Certifications() {
   return (
     <section id="certifications" className="py-24 px-6 border-t border-border-dim">
       <div className="max-w-3xl mx-auto">
-        <motion.h2
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="font-mono text-xs uppercase tracking-label text-accent"
-        >
-          Certifications
-        </motion.h2>
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-xs text-text-faint">05</span>
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="font-mono text-xs uppercase tracking-label text-accent"
+          >
+            Certifications
+          </motion.h2>
+        </div>
 
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {certifications.map((cert, i) => (
@@ -21,7 +24,8 @@ export function Certifications() {
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.05, duration: 0.5 }}
+              whileHover={{ y: -2, borderColor: "rgba(45,212,221,0.4)" }}
+              transition={{ delay: i * 0.05, duration: 0.2 }}
               className="p-5 rounded-xl border border-border-dim"
             >
               <div className="flex items-start justify-between gap-3">

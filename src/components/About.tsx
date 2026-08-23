@@ -4,19 +4,22 @@ export function About() {
   return (
     <section id="about" className="py-24 px-6 border-t border-border-dim">
       <div className="max-w-3xl mx-auto">
-        <motion.h2
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="font-mono text-xs uppercase tracking-label text-accent"
-        >
-          About
-        </motion.h2>
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-xs text-text-faint">01</span>
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="font-mono text-xs uppercase tracking-label text-accent"
+          >
+            About
+          </motion.h2>
+        </div>
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.08, duration: 0.5 }}
+          transition={{ delay: 0.08, duration: 0.2 }}
           className="mt-4 text-xl md:text-2xl text-text-main leading-relaxed"
         >
           I started as a full-stack developer, building systems that served 50,000+ users at

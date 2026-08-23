@@ -5,14 +5,17 @@ export function Experience() {
   return (
     <section id="experience" className="py-24 px-6 border-t border-border-dim">
       <div className="max-w-3xl mx-auto">
-        <motion.h2
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="font-mono text-xs uppercase tracking-label text-accent"
-        >
-          Experience
-        </motion.h2>
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-xs text-text-faint">02</span>
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="font-mono text-xs uppercase tracking-label text-accent"
+          >
+            Experience
+          </motion.h2>
+        </div>
 
         <div className="mt-8 flex flex-col gap-14">
           {experience.map((role, i) => (
@@ -21,7 +24,7 @@ export function Experience() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.06, duration: 0.5 }}
+              transition={{ delay: i * 0.06, duration: 0.2 }}
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <h3 className="font-display text-xl font-bold text-text-main">

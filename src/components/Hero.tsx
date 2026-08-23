@@ -10,8 +10,8 @@ export function Hero() {
   const photoX = useMotionValue(0);
   const photoY = useMotionValue(0);
   const springConfig = { stiffness: 150, damping: 20, mass: 0.5 };
-  const photoRotateX = useSpring(useTransform(photoY, [-0.5, 0.5], [6, -6]), springConfig);
-  const photoRotateY = useSpring(useTransform(photoX, [-0.5, 0.5], [-6, 6]), springConfig);
+  const photoRotateX = useSpring(useTransform(photoY, [-0.5, 0.5], [9, -9]), springConfig);
+  const photoRotateY = useSpring(useTransform(photoX, [-0.5, 0.5], [-9, 9]), springConfig);
 
   const handlePhotoMouseMove = (e: ReactMouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -31,7 +31,7 @@ export function Hero() {
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="font-mono text-xs uppercase tracking-label text-text-dim mb-6"
             >
               Dallas, TX — open to relocation
@@ -40,7 +40,7 @@ export function Hero() {
             <motion.h1
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
               className="font-display text-[clamp(2.75rem,6vw,5.5rem)] font-bold tracking-display leading-[0.95]"
             >
               Yaswanth <span className="text-accent">Ala</span>
@@ -49,7 +49,7 @@ export function Hero() {
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="mt-6 text-lg md:text-xl text-text-dim max-w-xl leading-relaxed"
             >
               AI Engineer — 4 years across software, data, and ML engineering, ~2 building
@@ -59,34 +59,40 @@ export function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="flex items-center gap-3 mt-9"
             >
-              <a
+              <motion.a
                 href={`${import.meta.env.BASE_URL}resume.pdf`}
                 download
                 target="_blank"
                 rel="noopener noreferrer"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.15 }}
                 className="flex items-center gap-2 bg-text-main text-bg px-6 py-2.5 rounded-full font-mono text-[11px] uppercase tracking-label hover:bg-accent transition-colors duration-300"
               >
                 <Download className="w-3.5 h-3.5" />
                 Resume
-              </a>
+              </motion.a>
               {[
                 { href: "mailto:alayaswanth007@gmail.com", icon: Mail, label: "Email" },
                 { href: "https://github.com/yashala", icon: Github, label: "GitHub" },
                 { href: "https://www.linkedin.com/in/yaswanth-a-a21aa9148/", icon: Linkedin, label: "LinkedIn" },
               ].map(({ href, icon: Icon, label }) => (
-                <a
+                <motion.a
                   key={label}
                   href={href}
                   target={href.startsWith("mailto") ? "_self" : "_blank"}
                   rel="noopener noreferrer"
                   title={label}
-                  className="w-10 h-10 rounded-full border border-border-dim flex items-center justify-center text-text-dim hover:text-accent hover:border-accent/40 transition-all duration-300"
+                  whileHover={{ y: -2, scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="w-10 h-10 rounded-full border border-border-dim flex items-center justify-center text-text-dim hover:text-accent hover:border-accent/40 transition-colors duration-300"
                 >
                   <Icon className="w-4 h-4" />
-                </a>
+                </motion.a>
               ))}
             </motion.div>
           </div>
@@ -94,7 +100,7 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.45, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="hidden lg:flex items-center justify-center"
           >
             <motion.div
