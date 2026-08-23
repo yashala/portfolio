@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Bot, Car, GlassWater, HeartPulse, Smartphone, Stethoscope } from "lucide-react";
+import { Bot, Car, GlassWater, Smartphone, Stethoscope } from "lucide-react";
 
 export interface Project {
   id: string;
@@ -24,8 +24,7 @@ export const projects: Project[] = [
       "Solo-shipped a cross-platform health app to Google Play from one React 19/TypeScript codebase via Capacitor. AI ingredient-label scanning through Gemini Vision with a human-in-the-loop review step, Health Connect integration, and a Cloudflare Worker proxy keeping the API key out of the client entirely.",
     tags: ["React 19", "TypeScript", "Capacitor", "Firebase", "Gemini Vision", "Cloudflare Workers"],
     icon: Smartphone,
-    github: null,
-    githubNote: "repo is private — link added once it's public",
+    github: "https://github.com/yashala/Healthy-Fight",
   },
   {
     id: "intelli-doc",
@@ -35,8 +34,7 @@ export const projects: Project[] = [
       "Browser-native document Q&A — client-side PDF parsing with pdfjs-dist, in-memory retrieval, and grounded answering via the Gemini API, with zero server-side document storage. A FastAPI + LangGraph + pgvector backend is in progress to support larger corpora and cross-encoder re-ranking.",
     tags: ["React 19", "TypeScript", "Vite", "Google Gemini", "pdfjs-dist"],
     icon: Bot,
-    github: null,
-    githubNote: "repo is private — link added once it's public",
+    github: "https://github.com/yashala/intelli-doc",
   },
   {
     id: "drowsiness-detection",
@@ -57,16 +55,6 @@ export const projects: Project[] = [
     tags: ["Healthcare", "GridDB", "Computer Vision"],
     icon: Stethoscope,
     github: "https://github.com/yashala/Brain-Tumor-detection",
-  },
-  {
-    id: "healthy-fight",
-    title: "Healthy Fight",
-    year: "2023",
-    description:
-      "A real-time health app where friends and family track, share, and compete on their wellness journeys.",
-    tags: ["Fitness", "Social", "Real-time"],
-    icon: HeartPulse,
-    github: "https://github.com/yashala/Healthy-Fight",
   },
   {
     id: "wine-quality",

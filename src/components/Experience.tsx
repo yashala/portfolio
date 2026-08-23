@@ -14,7 +14,7 @@ export function Experience() {
           Experience
         </motion.h2>
 
-        <div className="mt-8 space-y-14">
+        <div className="mt-8 flex flex-col gap-14">
           {experience.map((role, i) => (
             <motion.div
               key={role.company}
@@ -33,7 +33,7 @@ export function Experience() {
                 {role.location}
               </p>
 
-              <ul className="mt-4 space-y-2.5">
+              <ul className="mt-4 flex flex-col gap-2.5">
                 {role.points.map((point) => (
                   <li key={point} className="text-sm md:text-base text-text-dim leading-relaxed pl-4 relative">
                     <span className="absolute left-0 top-[0.65em] w-1.5 h-1.5 rounded-full bg-border-strong" />

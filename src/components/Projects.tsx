@@ -71,39 +71,26 @@ export function Projects() {
           Projects
         </motion.h2>
 
-        <div className="mt-8 space-y-5">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <ProjectCard project={featured} featured />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.06, duration: 0.5 }}
-          >
-            <ProjectCard project={secondary} />
-          </motion.div>
+        {/* flex+gap, not space-y — this build's compiled CSS has zero space-y-*
+            rules (verified via stylesheet inspection), which silently zeroed
+            the gap and let cards overlap. gap is layout-native and doesn't
+            depend on a separate margin utility being generated correctly. */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-8 flex flex-col gap-5"
+        >
+          <ProjectCard project={featured} featured />
+          <ProjectCard project={secondary} />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {rest.map((project, i) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 + i * 0.06, duration: 0.5 }}
-              >
-                <ProjectCard project={project} />
-              </motion.div>
+            {rest.map((project) => (
+              <ProjectCard key={project.id} project={project} />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

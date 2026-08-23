@@ -14,7 +14,7 @@ export function Skills() {
           Skills
         </motion.h2>
 
-        <div className="mt-8 space-y-8">
+        <div className="mt-8 flex flex-col gap-8">
           {skillGroups.map((group, gi) => (
             <motion.div
               key={group.label}
