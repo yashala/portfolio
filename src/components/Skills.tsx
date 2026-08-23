@@ -8,7 +8,11 @@ const groupVariants = {
 
 const tagVariants = {
   hidden: { opacity: 0, y: 6 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.18 } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+  },
 };
 
 export function Skills() {
@@ -40,6 +44,8 @@ export function Skills() {
                   <motion.span
                     key={skill}
                     variants={tagVariants}
+                    whileHover={{ y: -2, scale: 1.04 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     className="font-mono text-[11px] px-3 py-1.5 rounded-md border border-border-dim text-text-dim hover:border-accent/40 hover:text-text-main transition-colors duration-200"
                   >
                     {skill}

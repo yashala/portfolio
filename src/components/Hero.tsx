@@ -70,7 +70,7 @@ export function Hero() {
                 rel="noopener noreferrer"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.15 }}
+                transition={{ type: "spring", stiffness: 350, damping: 22 }}
                 className="flex items-center gap-2 bg-text-main text-bg px-6 py-2.5 rounded-full font-mono text-[11px] uppercase tracking-label hover:bg-accent transition-colors duration-300"
               >
                 <Download className="w-3.5 h-3.5" />
@@ -89,7 +89,7 @@ export function Hero() {
                   title={label}
                   whileHover={{ y: -2, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 22 }}
                   className="w-10 h-10 rounded-full border border-border-dim flex items-center justify-center text-text-dim hover:text-accent hover:border-accent/40 transition-colors duration-300"
                 >
                   <Icon className="w-4 h-4" />

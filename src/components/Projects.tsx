@@ -52,8 +52,8 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
       href={project.github!}
       target="_blank"
       rel="noopener noreferrer"
-      whileHover={{ y: -3 }}
-      transition={{ duration: 0.15 }}
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 350, damping: 22 }}
       className={baseClass}
     >
       {content}
@@ -86,7 +86,7 @@ export function Projects() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="mt-8 flex flex-col gap-5"
         >
           <ProjectCard project={featured} featured />

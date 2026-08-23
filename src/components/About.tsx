@@ -16,7 +16,7 @@ export function About() {
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.08, duration: 0.2 }}
+          transition={{ delay: 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="mt-4 text-xl md:text-2xl text-text-main leading-relaxed"
         >
           I started as a full-stack developer, building systems that served 50,000+ users at

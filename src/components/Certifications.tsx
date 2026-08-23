@@ -1,6 +1,15 @@
 import { motion } from "motion/react";
 import { certifications } from "../data/certifications";
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 12 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] as const },
+  }),
+};
+
 export function Certifications() {
   return (
     <section id="certifications" className="py-24 px-6 border-t border-border-dim">
@@ -18,11 +27,12 @@ export function Certifications() {
           {certifications.map((cert, i) => (
             <motion.div
               key={cert.title}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="show"
               viewport={{ once: true }}
-              whileHover={{ y: -2, borderColor: "rgba(45,212,221,0.4)" }}
-              transition={{ delay: i * 0.05, duration: 0.2 }}
+              custom={i}
+              whileHover={{ y: -3, borderColor: "rgba(45,212,221,0.4)", transition: { type: "spring", stiffness: 350, damping: 22 } }}
               className="p-5 rounded-xl border border-border-dim"
             >
               <div className="flex items-start justify-between gap-3">

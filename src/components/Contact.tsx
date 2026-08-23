@@ -10,7 +10,7 @@ export function Contact() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="font-display text-3xl md:text-4xl font-bold text-text-main mt-4"
         >
           Let's talk.
@@ -20,7 +20,7 @@ export function Contact() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.1, duration: 0.2 }}
+          transition={{ delay: 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-8"
         >
           {[
@@ -33,8 +33,8 @@ export function Contact() {
               href={href}
               target={href.startsWith("mailto") ? "_self" : "_blank"}
               rel="noopener noreferrer"
-              whileHover={{ y: -2 }}
-              transition={{ duration: 0.15 }}
+              whileHover={{ y: -3 }}
+              transition={{ type: "spring", stiffness: 350, damping: 22 }}
               className="flex items-center gap-2 border border-border-dim px-5 py-2.5 rounded-full font-mono text-[11px] uppercase tracking-label text-text-dim hover:text-accent hover:border-accent/40 transition-colors duration-300"
             >
               <Icon className="w-3.5 h-3.5" />

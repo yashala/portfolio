@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { Download, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,6 +9,13 @@ export function Nav() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const mobileNavPanelRef = useRef<HTMLDivElement>(null);
   const mobileNavToggleRef = useRef<HTMLButtonElement>(null);
+
+  // Reading-progress bar — tracks page scroll, spring-smoothed rather than
+  // stepping 1:1 with the scroll event so it settles fluidly instead of
+  // jittering. Pure transform (scaleX), so it's compositor-only — no layout
+  // cost regardless of page length.
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -63,6 +70,11 @@ export function Nav() {
 
   return (
     <>
+      <motion.div
+        style={{ scaleX }}
+        className="fixed top-0 left-0 right-0 z-[60] h-[2px] bg-accent origin-left"
+      />
+
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
           scrolled ? "bg-bg/85 backdrop-blur-2xl border-b border-border-dim py-4" : "bg-transparent py-7"
@@ -75,14 +87,20 @@ export function Nav() {
 
           <div className="hidden md:flex gap-9">
             {navLinks.map((item) => (
-              <a
+              <motion.a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="font-mono text-[11px] uppercase tracking-label text-text-dim hover:text-accent transition-colors duration-300 relative group"
+                initial="rest"
+                whileHover="hover"
+                className="font-mono text-[11px] uppercase tracking-label text-text-dim hover:text-accent transition-colors duration-300 relative"
               >
                 {item}
-                <span className="absolute -bottom-1.5 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full" />
-              </a>
+                <motion.span
+                  className="absolute -bottom-1.5 left-0 w-full h-px bg-accent origin-left"
+                  variants={{ rest: { scaleX: 0 }, hover: { scaleX: 1 } }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                />
+              </motion.a>
             ))}
           </div>
 
